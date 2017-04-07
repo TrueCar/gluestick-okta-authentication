@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - node
+cache: yarn
+script:
+  - yarn lint
+  - yarn test
+branches:
+  only:
+    - master
+    - /^v[\d]+\.[\d]+\.[\d]+$/
+deploy:
+  provider: npm
+  email: TODO
+  api_key:
+    secure: TODO
+  on:
+    tags: true
+    repo: TrueCar/gluestick-okta-authentication
