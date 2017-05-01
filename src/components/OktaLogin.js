@@ -1,22 +1,22 @@
 /* @flow */
 import React, { Component } from "react";
 
-type Props = {
+type OktaLoginProps = {
   authenticationUrl: string
 }
 
 export default class OktaLogin extends Component {
-  props: Props;
+  props: OktaLoginProps;
 
   oktaForm:Object;
   callbackInput:Object;
 
-  componentDidMount () {
+  componentDidMount() {
     this.callbackInput.value = window.location.href;
     this.oktaForm.submit();
   }
 
-  render () {
+  render() {
     return (
       <form action={`${this.props.authenticationUrl}`}
             style={{display: "none"}}

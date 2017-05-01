@@ -2,9 +2,9 @@
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import RequireAuth from "../components/RequireAuth";
-import { simulateSession } from "../actions/session";
+import { loadSessionFromServer, simulateSession } from "../actions/session";
 
 export default connect(
   (state) => ({session: state.session}),
-  (dispatch) => bindActionCreators({simulateSession}, dispatch)
+  (dispatch) => bindActionCreators({loadSessionFromServer, simulateSession}, dispatch)
 )(RequireAuth);

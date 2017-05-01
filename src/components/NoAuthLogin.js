@@ -1,18 +1,18 @@
 /* @flow */
 import { Component } from "react";
 
-type Props = {
+type NoAuthProps = {
   simulateSession: Function
 }
 
 export default class NoAuthLogin extends Component {
-  props: Props;
+  props: NoAuthProps;
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.simulateSession();
   }
 
-  render () {
+  render() {
     return null;
   }
 }

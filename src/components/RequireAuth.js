@@ -1,6 +1,5 @@
 /* @flow */
 import React, { Component } from "react";
-import { loadSessionFromServer } from "../actions/session";
 import { FeatureFlag } from "react-launch-darkly";
 import { sessionStateConstants } from "../constants/Session";
 import OktaLogin from "../components/OktaLogin";
@@ -8,7 +7,7 @@ import NoAuthLogin from "../components/NoAuthLogin";
 
 import type { sessionState } from "../reducers/session";
 
-type Props = {
+type RequireAuthProps = {
   authenticationUrl: string,
   children: ?any,
   featureFlagged: boolean,
@@ -19,43 +18,39 @@ type Props = {
 }
 
 export default class RequireAuth extends Component {
-  props: Props;
+  props: RequireAuthProps;
   state: {
-    mounted: boolean
+    checkedSession: boolean
   };
 
-  constructor (props:Props) {
+  constructor(props:Props) {
     super(props);
     this.state = {
-      mounted: false
+      checkedSession: false
     };
 
     (this:any)._renderOkta = this._renderOkta.bind(this);
     (this:any)._renderNoAuth = this._renderNoAuth.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({mounted: true});
-  }
-
-  static gsBeforeRoute({dispatch, getState}) {
-    // const { session } = getState();
-    // if (session.status !== sessionStateConstants.LOGGED_IN) {
-    //   //TODO How do we get this? Environment variable? I don't like that
-    //
-    // }
-    return dispatch(loadSessionFromServer("http://localhost:8888/api/auth/session.json"));
+  async componentDidMount() {
+    const { sessionUrl } = this.props.route;
+    const { loadSessionFromServer, session } = this.props;
+    if (session.status !== sessionStateConstants.LOGGED_IN) {
+      await loadSessionFromServer(sessionUrl);
+      this.setState({checkedSession: true})
+    }
   }
 
   render() {
-    const { mounted } = this.state;
+    const { checkedSession } = this.state;
     const { session, children } = this.props;
 
-    if (session.status === "LOGGED_IN") {
+    if (session.status === sessionStateConstants.LOGGED_IN) {
       return children;
     }
 
-    if (!mounted) {
+    if (!checkedSession) {
       return (
         <div>Loading...</div>
       );
@@ -69,18 +64,18 @@ export default class RequireAuth extends Component {
   }
 
   _renderAuth() {
-    const { featureFlagged = false } = this.props;
+    const { featureFlagged = false } = this.props.route;
     return featureFlagged ? this._renderFeatureFlaggedAuth() : this._renderOkta();
   }
 
   _renderFeatureFlaggedAuth() {
-    return ( <FeatureFlag flagKey={this.props.featureFlagKey}
+    return ( <FeatureFlag flagKey={this.props.route.featureFlagKey}
                         renderFeatureCallback={this._renderOkta}
                         renderDefaultCallback={this._renderNoAuth} />);
   }
 
   _renderOkta() {
-    return <OktaLogin authenticationUrl={this.props.authenticationUrl} />;
+    return <OktaLogin authenticationUrl={this.props.route.authenticationUrl} />;
   }
 
   _renderNoAuth() {

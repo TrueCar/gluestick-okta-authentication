@@ -15,13 +15,14 @@ export type sessionState = {
 
 const INITIAL_STATE: sessionState = Immutable({status: sessionStateConstants.LOGGED_OUT, user: null});
 
+//TODO Need to test figure out what happens when someone is not in the Okta group
 export default (state: Object = INITIAL_STATE, action: Object): Object => {
   switch (action.type) {
     case GET_SESSION: {
       let status = sessionStateConstants.LOGGED_OUT;
       let user = null;
 
-      const { session } = action.value;
+      const { session } = action.value.data;
       if (session.user) {
         status = sessionStateConstants.LOGGED_IN;
         user = session.user;
