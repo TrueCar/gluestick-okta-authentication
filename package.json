@@ -57,6 +57,7 @@
     "seamless-immutable": ">=7.1.1"
   },
   "peerDependencies": {
+    "gluestick": ">=1.0.0",
     "react": ">=15.0.0",
     "react-dom": ">=15.0.0",
     "react-redux": "^5.0.3",

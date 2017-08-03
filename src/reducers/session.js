@@ -22,7 +22,7 @@ export default (state: Object = INITIAL_STATE, action: Object): Object => {
       let status = sessionStateConstants.LOGGED_OUT;
       let user = null;
 
-      const { session } = action.value.data;
+      const { session } = action.payload.data;
       if (session.user) {
         status = sessionStateConstants.LOGGED_IN;
         user = session.user;
