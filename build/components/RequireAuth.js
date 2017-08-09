@@ -49,6 +49,9 @@ var RequireAuth = function (_Component) {
     return _this;
   }
 
+  // $FlowIgnore - Flow componentDidMount wants to return void, but adding async makes it return a Promise
+
+
   _createClass(RequireAuth, [{
     key: "componentDidMount",
     value: function () {
