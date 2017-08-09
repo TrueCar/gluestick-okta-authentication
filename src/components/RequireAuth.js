@@ -8,12 +8,15 @@ import NoAuthLogin from "../components/NoAuthLogin";
 import type { sessionState } from "../reducers/session";
 
 type RequireAuthProps = {
-  authenticationUrl: string,
   children: ?any,
-  featureFlagged: boolean,
-  featureFlagKey: string,
+  loadSessionFromServer: Function,
+  route: {
+    authenticationUrl: string,
+    featureFlagged: boolean,
+    featureFlagKey: string,
+    sessionUrl: string
+  },
   session: sessionState,
-  sessionUrl: string,
   simulateSession: Function
 }
 
@@ -23,7 +26,7 @@ export default class RequireAuth extends Component {
     checkedSession: boolean
   };
 
-  constructor(props:Props) {
+  constructor(props:RequireAuthProps) {
     super(props);
     this.state = {
       checkedSession: false
@@ -33,6 +36,7 @@ export default class RequireAuth extends Component {
     (this:any)._renderNoAuth = this._renderNoAuth.bind(this);
   }
 
+  // $FlowIgnore - Flow componentDidMount wants to return void, but adding async makes it return a Promise
   async componentDidMount() {
     const { sessionUrl } = this.props.route;
     const { loadSessionFromServer, session } = this.props;
