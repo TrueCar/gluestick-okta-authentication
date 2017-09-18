@@ -39,7 +39,7 @@ export default class RequireAuth extends Component {
   // $FlowIgnore - Flow componentDidMount wants to return void, but adding async makes it return a Promise
   async componentDidMount() {
     const { sessionUrl } = this.props.route;
-    const { loadSessionFromServer, session } = this.props;
+    const { loadSessionFromServer, session = {} } = this.props;
     if (session.status !== sessionStateConstants.LOGGED_IN) {
       await loadSessionFromServer(sessionUrl);
       this.setState({checkedSession: true})
@@ -48,7 +48,7 @@ export default class RequireAuth extends Component {
 
   render() {
     const { checkedSession } = this.state;
-    const { session, children } = this.props;
+    const { session = {}, children } = this.props;
 
     if (session.status === sessionStateConstants.LOGGED_IN) {
       return children;
